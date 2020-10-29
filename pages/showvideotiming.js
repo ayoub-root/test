@@ -43,7 +43,8 @@ startt() {
  
 
  tick =() => {if(this.state.counter<1) {
-    this.props.navigation.navigate('Showvideo',{Newname:this.props.route.params.Newname});
+    this.props.navigation.navigate('Showvideo',{Newname:this.props.route.params.Newname,
+      duree:this.props.route.params.duree});
   this.setState({counter:3,show:'none'});
   clearInterval(this.state.timer);
   this.state.show='none';

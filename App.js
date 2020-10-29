@@ -14,7 +14,7 @@ import { Button, View } from 'react-native';
 //const Stack = createStackNavigator();
 
 const App = () => {
-  return (<Tabs/>
+  return (<Tabs />
    /* <NavigationContainer>
       <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen

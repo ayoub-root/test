@@ -13,6 +13,7 @@ import ViewExercice from '../pages/ViewExercice';
 import ViewAllExercice from '../pages/ViewAllExercice';
 import DeleteExercice from '../pages/DeleteExercice';
 import Showvideo from "../pages/showvideo";
+import Feedback from "../pages/feedback";
 import Showvideotiming from "../pages/showvideotiming";
 //import ListExercices from "./listexercices";
 const Stack = createStackNavigator();
@@ -129,6 +130,21 @@ return(
       options={{
         name:'',
         title: 'detail Exercice', //Set Header Title
+        headerStyle: {
+          backgroundColor: '#f4511e', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}
+    />
+     <Stack.Screen
+      name="Feedback"
+      component={Feedback}
+      options={{
+        name:'',
+        title: 'feedback sur Exercice', //Set Header Title
         headerStyle: {
           backgroundColor: '#f4511e', //Set Header color
         },

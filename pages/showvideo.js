@@ -13,6 +13,7 @@ export default class Showvideo extends React.Component {
       super(props);
       
       this.state = {
+         time:null,
       paused:false,
      autoplay:true
      }
@@ -20,13 +21,24 @@ export default class Showvideo extends React.Component {
    componentDidMount() {
    }
 play=()=>{
-  alert('jio');
+
  
 
 this.setState({autoplay:true,
   
 });
 
+}
+ convertHMS(value) {
+   const sec = parseInt(value, 10); // convert value to number if it's string
+   let hours   = Math.floor(sec / 3600); // get hours
+   let minutes = Math.floor((sec - (hours * 3600)) / 60); // get minutes
+   let seconds = sec - (hours * 3600) - (minutes * 60); //  get seconds
+   // add 0 if value < 10
+   if (hours   < 10) {hours   = "0"+hours;}
+   if (minutes < 10) {minutes = "0"+minutes;}
+   if (seconds < 10) {seconds = "0"+seconds;}
+   return hours+':'+minutes+':'+seconds; // Return is HH : MM : SS
 }
 render() {
   const { navigate } = this.props;  
@@ -44,9 +56,10 @@ render() {
          video={{uri:"file://"+DirectoryVPath+"/"+this.props.route.params.Newname+".mp4"}}
          onBuffer={this.onBuffer}
          onError={this.onError}
+         onProgress={e =>{this.setState({time:parseInt(e.currentTime)}); if(e.currentTime>=this.props.route.params.duree)this.player.pause(); }}
         onLoad={console.log(this.props.route.params.Newname)}
          style={styles.videoPlayer} />
-         <Button title="Play" onPress={()=>{this.player.resume() }}></Button>
+        
          <View style={{flexDirection:'row',justifyContent:"space-between"}}>
          <Button
           onPress={() => this.player.stop()}
@@ -59,7 +72,21 @@ render() {
         <Button
           onPress={() => this.player.resume()}
           title="Resume"
-        /></View>
+        />
+        </View>
+
+<Text ref={this.timerr} style={{
+        
+         fontSize:40, marginTop:50,flexDirection:'row',
+         textAlign: 'center',
+     // paddingLeft:Dimensions.get('screen').width/3,justifyContent:'center'
+   }}
+      >{this.convertHMS(this.state.time)}</Text>
+              <View ><Button  title="terminer" onPress={()=>{this.player.pause();
+            this.props.navigation.navigate('Feedback',{name:'',description:''});
+            
+            }}></Button></View> 
+
          </View>
       );
    }

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { useState } from 'react';
-import { View,Text ,FlatList,StyleSheet,StatusBar,SafeAreaView, Dimensions} from 'react-native';
-import { RadioButton ,Checkbox} from 'react-native-paper';
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
+import { View,Text ,FlatList,StyleSheet,StatusBar,ScrollView, Dimensions} from 'react-native';
+import { RadioButton } from 'react-native-paper';
 
 
  //var dd=5;
@@ -12,78 +11,48 @@ import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolic
  
  
 
-const Item = (item) => (
-    // [value, setValue] = React.useState('first');
-  <View style={styles.item}>
-    <Text style={styles.title}>{item.num}. {item.title} </Text>
-    
-    <FlatList
-      data={item.option}
-      renderItem={item.renderradio}
-    
-    />
-  
-  </View>
-);
-   var stat=[0];
-const RadioItem = (item) => (
-  
-  console.log(dd[item.vale]+"ddddddddddd"),
-     <View style={{flexDirection:'row', justifyContent:'flex-start'}}>
-     <RadioButton  value={item.val}  />
- <Text style={styles.items}>{item.vale} {item.val} pts: {item.text}</Text>
-          
-         </View>
-     
-);
-var dd=[0];
+let sco=0;
  export default class Evaluation extends React.Component {
      state={
+       pos:0,
         result:0,
-        values:[0,0,0,0,0,0,0,0,0,0,0,0],
+        values:[],
      }
    // markers=[0];
      constructor(props){
          super(props);
+       
          this.markers = [ ...this.state.values ];  
      }
-     
-     renderradio = ({item} ) => { 
+     Item = (item) => (
+    
+      // [value, setValue] = React.useState('first');
+    <View style={styles.item} >
+     <View  >
+       <Text style={styles.title}>{item.num}. {item.title} </Text>
+      <RadioButton.Group value={this.state.values[item.num]} 
+      onValueChange={value=>{
+          console.log(this.state.values[item.num]+"")
          
-       
-     return(
-  
-        <RadioButton.Group onValueChange ={value=>{
-          //  console.log(item)
-           
-           this.markers[item.num] =  value;
-            this.setState({values: this.markers });
-            
-            this.setState({result:this.markers.reduce((sum, i) => sum + i, 0)});
-           dd=this.markers;
-       console.log(this.state.values+" --- "+this.markers[item.num]+' --- '+item.num)
-      // console.log(this.state.values+" --- "+markers+' --- '+item.num)
-        }
-       
-        } value={this.state.values[item.num]} >
-
-<View style={{flexDirection:'row', justifyContent:'flex-start'}}>
-     <RadioButton 
+         this.markers[item.num] = value;
+          this.setState({values: this.markers });
+          sco=sco+ 150;
+          this.setState({result:this.markers.reduce((sum, i) => sum + parseInt(i), 0)});
+          this.refs._scrollView.scrollTo({y:this.state.pos+150 , animated: true}); 
+ }
      
-    // status={ item.val === this.state.values[item.num] ? 'checked' : 'unchecked' }
-     value={item.val}  />
- 
- 
- <Text  style={styles.items}>{this.state.result} {item.val} pts: {item.text}</Text>
-          
-         </View>
-        
-     </RadioButton.Group>
-     
+      }
+      >
+        <View >{item.option.map((radio)=>{ 
+          return(<View style={{flexDirection:'row', justifyContent:'flex-start'}}>
+            <RadioButton  style={{padding:50,marginHorizontal:20}}value={radio.val+""} /><Text style={styles.items}>{radio.val} {radio.text}</Text></View>);})}</View> 
+        </RadioButton.Group></View>
       
-    );
-
-    }
+    
+    
+    </View>
+  );
+    
   
        DATA=[
       {num:1, 
@@ -159,26 +128,35 @@ var dd=[0];
       }
       ];
 
-     renderItem = ({ item }) => (
-        <Item renderradio={this.renderradio} num={item.num} title={item.quest} option={item.option} >
-
-            
-        </Item>
-      );
+      handleScroll= (event)=> {
+        this.state.pos=event.nativeEvent.contentOffset.y;
+      //  console.log(event.nativeEvent.contentOffset.y);
+       }
      render(){
   return (
       
-  
-          <View style={styles.container}>
-              <Text style={{height:20,textAlign:"center"}}>Resultat: {this.state.result}</Text>
-        <FlatList
+ 
+    <View style={styles.container}>
+              <Text style={{height:25,textAlign:'center',fontSize:20, backgroundColor:'rgba(12,85,00,0.4)'}}>Resultat: {this.state.result}</Text>
+        <ScrollView
+        onScroll={this.handleScroll} 
+     
+       
+        ref='_scrollView'
+      
+       
+        
+    ><FlatList
+   
           data={this.DATA}
-          renderItem={this.renderItem}
+          renderItem={({item})=>{return (<this.Item num={item.num} title={item.quest} option={item.option} />)}}
          // keyExtractor={item => {item.num}}
         /> 
         
-    
+     </ScrollView>
       </View>
+   
+         
      
      
     
